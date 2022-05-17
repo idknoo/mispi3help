@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="mispi3help:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>mispi3help</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="mispi3help-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="mispi3help:war exploded" />
+    </root>
+  </artifact>
+</component>

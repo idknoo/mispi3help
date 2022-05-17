@@ -1,0 +1,201 @@
+<project name="mispi3">
+    <property file="build.properties"/>
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="lib/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
+
+    <target name="compile" description="Компиляция кода">
+        <mkdir dir="${buildDir}"/>
+        <mkdir dir="${buildDir}/WEB-INF/classes"/>
+        <mkdir dir="${buildDir}/WEB-INF/lib"/>
+        <mkdir dir="${buildDir}/META-INF"/>
+
+
+        <path id="classpath">
+            <fileset dir="${libraryDir}" includes="*.jar"/>
+        </path>
+
+        <pathconvert property="compile.classpath" refid="classpath"/>
+        <echo>Classpath: ${compile.classpath}</echo>
+
+        <javac includeantruntime="false" destdir="${buildDir}/WEB-INF/classes">
+            <src path="${srcDir}"/>
+            <classpath refid="classpath"/>
+        </javac>
+
+        <copy todir="${buildDir}/WEB-INF/lib" flatten="true">
+            <path refid="classpath"/>
+        </copy>
+
+        <echo>Copying resources folder...</echo>
+
+        <copy todir="${buildDir}/WEB-INF/classes">
+            <fileset dir="${resourcesDir}" includes="**"/>
+        </copy>
+
+        <echo>Copying webapp folder...</echo>
+
+        <copy todir="${buildDir}">
+            <fileset dir="${webappDir}" includes="*.xhtml"/>
+        </copy>
+
+        <copy todir="${buildDir}/WEB-INF">
+            <fileset dir="${webappDir}/WEB-INF" includes="*.xml"/>
+        </copy>
+
+<!--        <copy todir="${buildDir}/WEB-INF">-->
+<!--            <fileset dir="${webappDir}/WEB-INF" includes="faces-config.xml"/>-->
+<!--        </copy>-->
+
+<!--        <copy todir="${buildDir}/WEB-INF">-->
+<!--            <fileset dir="${webappDir}/WEB-INF" includes="beans.xml"/>-->
+<!--        </copy>-->
+
+        <copy todir="${buildDir}/js">
+            <fileset dir="${webappDir}/js" includes="**"/>
+        </copy>
+
+        <copy todir="${buildDir}/css">
+            <fileset dir="${webappDir}/css" includes="**"/>
+        </copy>
+
+        <copy todir="${buildDir}/img">
+            <fileset dir="${webappDir}/img" includes="**"/>
+        </copy>
+
+        <echo>Creating manifest...</echo>
+        <manifest file="${buildDir}/META-INF/MANIFEST.MF">
+            <attribute name="Built-By" value="Zavar30"/>
+            <attribute name="Created-By" value="ant"/>
+            <attribute name="Build-jdk" value="${java.version}"/>
+        </manifest>
+    </target>
+
+    <target name="build" depends="compile" description="Создание war файла">
+        <war destfile="${warDir}/${warName}">
+            <fileset dir="${buildDir}" includes="**"/>
+        </war>
+    </target>
+
+    <target name="clean" description="Очистка всех скомпилированных классов и временных файлов">
+        <delete dir="${buildDir}"/>
+    </target>
+
+    <target name="test" depends="build" description="Запуск тестов">
+
+        <path id="test.classpath">
+            <fileset dir="lib">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+
+        <echo>CP: ${test.classpath}</echo>
+
+        <delete dir="${testDir}"/>
+        <mkdir dir="${testDir}"/>
+        <javac includeantruntime="false" destdir="${testDir}">
+            <classpath refid="classpath"/>
+            <src path="${srcDir}"/>
+            <src path="${resourcesDir}"/>
+            <src path="${testSrcDir}"/>
+            <classpath refid="test.classpath"/>
+        </javac>
+
+        <junit printsummary="on" haltonfailure="yes" fork="true">
+            <classpath>
+                <path refid = "classpath"/>
+                <path refid = "test.classpath"/>
+                <pathelement location="${testDir}"/>
+                <pathelement location="${resourcesDir}"/>
+            </classpath>
+            <formatter type="brief" usefile="false" />
+            <batchtest>
+                <fileset dir="${testDir}">
+                    <include name="**/*Test*"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="scp" depends="build" description="перемещение собранного проекта по scp на выбранный сервер по завершению сборки">
+        <scp file="${warDir}/mispi3.war"
+             todir="s312326@se.ifmo.ru:~/"
+             password="uqk884" trust="true" port="2222"/>
+    </target>
+
+    <target name="history">
+        <exec executable="git" outputproperty="commits.count">
+            <arg value="rev-list"/>
+            <arg value="--count"/>
+            <arg value="HEAD"/>
+        </exec>
+
+        <exec executable="git" outputproperty="current.commit">
+            <arg value="rev-parse"/>
+            <arg value="HEAD"/>
+        </exec>
+
+        <exec executable="git" outputproperty="current.work_diff">
+            <arg value="diff"/>
+            <arg value="HEAD"/>
+        </exec>
+
+        <if>
+            <length string="${current.work_diff}" length="0" trim="true" when="greater"/>
+            <then>
+                <fail message="Working tree should not have changes"/>
+            </then>
+        </if>
+
+        <trycatch>
+            <try>
+                <for param="i" begin="1" end="${commits.count}">
+                    <sequential>
+                        <trycatch>
+                            <try>
+                                <antcall target="compile"/>
+                                <property name="breakProperty" value="true"/>
+                            </try>
+                            <catch>
+                                <exec executable="git" outputproperty="previous.commit">
+                                    <arg value="rev-parse"/>
+                                    <arg value="HEAD"/>
+                                </exec>
+                                <echo>Error in compile target</echo>
+                                <exec executable="git">
+                                    <arg value="reset"/>
+                                    <arg value="--hard"/>
+                                    <arg value="HEAD~1"/>
+                                </exec>
+                            </catch>
+                            <finally>
+                                <fail if="breakProperty"/>
+                            </finally>
+                        </trycatch>
+                    </sequential>
+                </for>
+            </try>
+            <catch>
+                <echo>Well done</echo>
+            </catch>
+            <finally>
+                <if>
+                    <isset property="previous.commit"/>
+                    <then>
+                        <exec executable="git">
+                            <arg value="diff"/>
+                            <arg value="${previous.commit}"/>
+                            <redirector output="diff.txt" alwayslog="true"/>
+                        </exec>
+                    </then>
+                </if>
+                <echo>Original commit: ${current.commit}</echo>
+            </finally>
+        </trycatch>
+    </target>
+
+</project>

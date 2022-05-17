@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <title>Main</title>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/img/favicon.ico"/>
+<!--    <link rel="icon" href="img/favicon.ico"/>-->
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300&amp;display=swap" rel="stylesheet"/>
+</h:head>
+
+<h:body styleClass="backgroundColor">
+    <div>
+        <h:form id="calcForm">
+            <div id="errWindowDiv" class="errColor bordering menuObjects">
+                <h:outputText id="errWindow" value="" binding="#{managerBean.errWindow}"/>
+                <h:message for="errWindow"/>
+            </div>
+
+            <svg id="svgArea" class="bordering" width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:bx="https://boxy-svg.com">
+                <rect x="50" y="250" width="200" height="100" style="fill: rgb(115, 111, 250);"/>
+                <path style="fill: rgb(115, 111, 250);"
+                      transform="matrix(0.403203, 0, 0, 0.403203, 146.511078, 111.970299)"
+                      d="M 255 590 A 248 248 0 0 0 504 343 L 256 342 Z"
+                      bx:shape="pie 256.667 342.333 0 248.014 270 360 1@b9a73745"/>
+                <path d="M 276.115 218.637 L 276.115 418.637 L 76.115 418.637 L 276.115 218.637 Z"
+                      style="fill: rgb(115, 111, 250);"
+                      transform="matrix(-0.000086, 1, -1, -0.000086, 668.677917, -26.082752)"
+                      bx:shape="triangle 276.115 218.637 200 200 0 0 1@d50c9621"/>
+                <rect y="249" width="500" height="2" style=""/>
+                <rect x="249" width="2" height="500" style=""/>
+                <rect x="449" y="245" width="2" height="10" style=""/>
+                <rect x="349" y="245" width="2" height="10" style=""/>
+                <rect x="149" y="245" width="2" height="10" style=""/>
+                <rect x="49" y="245" width="2" height="10" style=""/>
+                <rect x="235.827" y="132.158" width="2" height="10" style=""
+                      transform="matrix(0, 1, -1, 0, 387.15802, -86.826996)"/>
+                <rect x="235.827" y="132.158" width="2" height="10" style=""
+                      transform="matrix(0, 1, -1, 0, 387.192413, -186.826996)"/>
+                <rect x="235.827" y="132.158" width="2" height="10" style=""
+                      transform="matrix(0, 1, -1, 0, 387.15802, 113.173004)"/>
+                <rect x="235.827" y="132.158" width="2" height="10" style=""
+                      transform="matrix(0, 1, -1, 0, 387.15802, 213.173004)"/>
+                <text class="unselectable" style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 15.9px;"
+                      x="443.488" y="236.492">R
+                </text>
+                <text class="unselectable" style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 15.9px;"
+                      x="348.212" y="228.553">R/2
+                </text>
+                <text class="unselectable" style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 15.9px;"
+                      x="261.443" y="154.828">R/2
+                </text>
+                <text class="unselectable" style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 15.9px;"
+                      x="260.877" y="55.015">R
+                </text>
+                <text class="unselectable" style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 15.9px;"
+                      x="262.011" y="354.453">-R/2
+                </text>
+                <text class="unselectable" style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 15.9px;"
+                      x="261.443" y="455.211">-R
+                </text>
+                <text class="unselectable" style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 15.9px;"
+                      x="118.529" y="240.274">-R/2
+                </text>
+                <text class="unselectable" style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 15.9px;"
+                      x="42.536" y="232.901">-R
+                </text>
+                <rect y="249.95" width="500" height="0.2" style="fill: rgb(216, 216, 216);"/>
+                <rect x="249.9" width="0.2" height="500" style="fill: rgb(216, 216, 216);"/>
+            </svg>
+
+            <div id="xDiv" class="bordering centering standardColor menuObjects">
+                <span id="xParameterTitle" class="title">Параметр X</span>
+                <br/>
+                <h:commandButton id="X1" class="XcommandButton" type="button" value="-2"/>
+                <h:commandButton id="X2" class="XcommandButton" type="button" value="-1"/>
+                <h:commandButton id="X3" class="XcommandButton" type="button" value="0"/>
+                <h:commandButton id="X4" class="XcommandButton" type="button" value="1"/>
+                <h:commandButton id="X5" class="XcommandButton" type="button" value="2"/>
+                <div class="errColor">
+                    <h:message styleClass="errColor" for="X"/>
+                </div>
+                <div>
+                    <span id="xErr"/>
+                </div>
+            </div>
+            <div id="yDiv" class="bordering centering standardColor menuObjects">
+                <span class="title">Параметр Y</span>
+                <div id="Yparent">
+                    <h:inputText id="Y" class="YcommandButton" validator="yValidator" value="#{managerBean.y}"/>
+                </div>
+                <h:message styleClass="errColor" for="Y"/>
+                <div>
+                    <div class="errColor">
+                        <span id="yErr"/>
+                    </div>
+                </div>
+            </div>
+            <div id="rDiv" class="bordering centering standardColor menuObjects">
+                <span class="title">Параметр R</span>
+                <div id="Rparent">
+
+                    <p:spinner id="R" validator="rValidator" value="#{managerBean.r}"
+                               min="1" max="5" stepFactor="1"/>
+                    <h:message styleClass="errColor" for="R"/>
+                    <div>
+                        <div class="errColor">
+                            <span id="rErr"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="buttonDiv" class=" centering standardColor menuObjects">
+                <div id="checkButtonParent">
+                    <h:commandButton id="buttonCheck" styleClass="main-button title pad" action="#{managerBean.doAction}" value="Dot check">
+                        <f:ajax execute="@form" render="@all" onevent="afterAjaxSuccess"/>
+                    </h:commandButton>
+                </div>
+                <div>
+                    <h:commandButton id="Back" styleClass="main-button title pad" action="toStart" value="Back to sea"/>
+                </div>
+                <div>
+                    <h:commandButton styleClass="main-button title pad" action="#{managerBean.clearLastRequests}" value="Clear history">
+                        <f:ajax execute="@form" render="@all" onevent="afterAjaxSuccess"/>
+                    </h:commandButton>
+                </div>
+            </div>
+            <div id="hiddenDiv" style="visibility: hidden">
+                <div id="Xparent">
+                    <h:inputHidden id="X" class="inputeHiddenX" value="#{managerBean.x}" validator="xValidator"/>
+                </div>
+                <h:commandButton action="#{managerBean.updateValuesList}" style="visibility: hidden">
+                    <f:ajax execute="@none" render="@all"/>
+                </h:commandButton>
+            </div>
+        </h:form>
+
+        <div id="table-scroll-container" class="centering menuObjects bordering">
+            <h2><h:outputText styleClass="title" value="Список запросов"/></h2>
+            <h:dataTable id="dataTable" value="#{managerBean.valuesList}" var="p">
+                <h:column>
+                    <f:facet name="header">X</f:facet>
+                    <div class="result cen tableColon">
+                        <h:outputText value="#{p.x}"/>
+                    </div>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Y</f:facet>
+                    <div class="result cen tableColon">
+                        <h:outputText value="#{p.y}"/>
+                    </div>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">R</f:facet>
+                    <div class="result cen tableColon">
+                        <h:outputText value="#{p.r}"/>
+                    </div>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Попадание</f:facet>
+                    <div class="result cen tableColon">
+                        <h:outputText value="#{p.stringCatch}"/>
+                    </div>
+                </h:column>
+            </h:dataTable>
+        </div>
+        </div>
+    <script src="js/script.js" type="text/javascript"/>
+</h:body>
+
+</html>

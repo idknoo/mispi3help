@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                                  http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>toMain</from-outcome>
+            <to-view-id>/main.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>toStart</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+<!--    <navigation-rule>-->
+<!--        <from-view-id>/main.xhtml</from-view-id>-->
+<!--        <navigation-case>-->
+<!--            <from-outcome>toStart</from-outcome>-->
+<!--            <to-view-id>/start.xhtml</to-view-id>-->
+<!--            <redirect/>-->
+<!--        </navigation-case>-->
+<!--    </navigation-rule>-->
+
+    <managed-bean>
+        <managed-bean-name>managerBean</managed-bean-name>
+        <managed-bean-class>com.idknoo.mispi3help.ManagerBean</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+
+        <managed-property>
+            <property-name>valuesManaging</property-name>
+            <property-class>com.idknoo.mispi3help.values.ValuesManagerBean</property-class>
+            <value>#{valuesManagerBean}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>areaChecking</property-name>
+            <property-class>com.idknoo.mispi3help.areachecker.AreaCheckerBean</property-class>
+            <value>#{areaCheckerBean}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>valuesList</property-name>
+            <value>#{valuesManagerBean.valuesList}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>dbWorkerBean</managed-bean-name>
+        <managed-bean-class>com.idknoo.mispi3help.dbwork.DBWorkerBean</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>areaCheckerBean</managed-bean-name>
+        <managed-bean-class>com.idknoo.mispi3help.areachecker.AreaCheckerBean</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>valuesManagerBean</managed-bean-name>
+        <managed-bean-class>com.idknoo.mispi3help.values.ValuesManagerBean</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+
+        <managed-property>
+            <property-name>dbWorking</property-name>
+            <property-class>com.idknoo.mispi3help.dbwork.DBWorkerBean</property-class>
+            <value>#{dbWorkerBean}</value>
+        </managed-property>
+    </managed-bean>
+    <validator>
+        <validator-id>xValidator</validator-id>
+        <validator-class>com.idknoo.mispi3help.validate.XvalueValidator</validator-class>
+    </validator>
+    <validator>
+        <validator-id>yValidator</validator-id>
+        <validator-class>com.idknoo.mispi3help.validate.YvalueValidator</validator-class>
+    </validator>
+    <validator>
+        <validator-id>rValidator</validator-id>
+        <validator-class>com.idknoo.mispi3help.validate.RvalueValidator</validator-class>
+    </validator>
+  
+</faces-config>
