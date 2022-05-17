@@ -144,12 +144,12 @@
             <arg value="HEAD"/>
         </exec>
 
-        <if>
-            <length string="${current.work_diff}" length="0" trim="true" when="greater"/>
-            <then>
-                <fail message="Working tree should not have changes"/>
-            </then>
-        </if>
+<!--        <if>-->
+<!--            <length string="${current.work_diff}" length="0" trim="true" when="greater"/>-->
+<!--            <then>-->
+<!--                <fail message="Working tree should not have changes"/>-->
+<!--            </then>-->
+<!--        </if>-->
 
         <trycatch>
             <try>
