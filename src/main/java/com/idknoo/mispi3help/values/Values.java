@@ -6,7 +6,7 @@ public class Values implements Comparable{
     private double x;
     private double y;
     private double r;
-    private boolean isCatch ;
+    private boolean isCatch;
     private Date createDate;
 
     public Values(double x, double y, double r, boolean isCatch, Date date) {

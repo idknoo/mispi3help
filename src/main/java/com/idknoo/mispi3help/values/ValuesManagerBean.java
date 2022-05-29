@@ -1,14 +1,18 @@
 package com.idknoo.mispi3help.values;
 
-
 import com.idknoo.mispi3help.dbwork.DBWorking;
+import com.idknoo.mispi3help.mbeans.AverageInterval;
+import com.idknoo.mispi3help.mbeans.AverageIntervalMBean;
+import com.idknoo.mispi3help.mbeans.ShotCounter;
+import com.idknoo.mispi3help.mbeans.ShotCounterMBean;
 
 import javax.annotation.PostConstruct;
+import javax.management.JMException;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.lang.management.ManagementFactory;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ValuesManagerBean implements ValuesManaging {
     private List<Values> valuesList = Collections.synchronizedList(new ArrayList<Values>());
@@ -16,8 +20,16 @@ public class ValuesManagerBean implements ValuesManaging {
     private DBWorking dbWorking;
     private boolean successStartSynchronise;
 
+    private final ShotCounterMBean shotCounterMBean = new ShotCounter();
+    private final AverageIntervalMBean averageIntervalMBean = new AverageInterval();
+
+//    ValuesManagerBean() {
+//        initMBeans();
+//    }
+
     @PostConstruct
     public void startLoading() {
+        initMBeans();
         addLastRequests();
     }
 
@@ -44,6 +56,7 @@ public class ValuesManagerBean implements ValuesManaging {
     @Override
     public void addValue(Values values) {
         notSynchronizedValues.add(values);
+        shotCounterMBean.addShot(values);
     }
 
     @Override
@@ -107,5 +120,17 @@ public class ValuesManagerBean implements ValuesManaging {
 
     public void setValuesList(List<Values> valuesList) {
         this.valuesList = valuesList;
+    }
+
+    private void initMBeans() {
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        try {
+            mbs.registerMBean(shotCounterMBean,
+                    new ObjectName("com.idknoo.mispi3help.mbeans:type=ShotCounter"));
+            mbs.registerMBean(averageIntervalMBean,
+                    new ObjectName("com.idknoo.mispi3help.mbeans:type=AverageInterval"));
+        } catch (JMException e) {
+            e.printStackTrace();
+        }
     }
 }

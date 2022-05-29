@@ -1,25 +1,12 @@
-diff --git a/.idea/vcs.xml b/.idea/vcs.xml
-deleted file mode 100644
-index 94a25f7..0000000
---- a/.idea/vcs.xml
-+++ /dev/null
-@@ -1,6 +0,0 @@
--<?xml version="1.0" encoding="UTF-8"?>
--<project version="4">
--  <component name="VcsDirectoryMappings">
--    <mapping directory="$PROJECT_DIR$" vcs="Git" />
--  </component>
--</project>
-\ No newline at end of file
 diff --git a/build.xml b/build.xml
-index 4fe3773..8fe874f 100644
+index 9711359..77b04b5 100644
 --- a/build.xml
 +++ b/build.xml
-@@ -122,6 +122,7 @@
-     </target>
+@@ -143,7 +143,6 @@
+             <arg value="diff"/>
+             <arg value="HEAD"/>
+         </exec>
+-        <echo>HELLO</echo>
  
-     <target name="scp" depends="build" description="перемещение собранного проекта по scp на выбранный сервер по завершению сборки">
-+<!--        <echo message="${war.file.name}"/>-->
-         <scp file="${warDir}/mispi3.war"
-              todir="s312326@se.ifmo.ru:~/"
-              password="uqk884" trust="true" port="2222"/>
+ <!--        <if>-->
+ <!--            <length string="${current.work_diff}" length="0" trim="true" when="greater"/>-->
